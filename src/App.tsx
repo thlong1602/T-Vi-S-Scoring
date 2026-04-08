@@ -325,7 +325,7 @@ const RadarChart = ({ scores }: { scores: Scores }) => {
 };
 
 export default function App() {
-  const [apiKey, setApiKey] = useState(process.env.GEMINI_API_KEY || '');
+  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState('');
