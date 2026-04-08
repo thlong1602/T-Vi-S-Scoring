@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- Types ---
 interface Scores {
@@ -375,7 +376,7 @@ TUÂN THỦ TUYỆT ĐỐI CÁC QUY TẮC LÕI:
 5. TÍNH NHẤT QUÁN TUYỆT ĐỐI (QUAN TRỌNG NHẤT): Cùng một lá số, bạn BẮT BUỘC phải luôn đưa ra một kết quả điểm số giống hệt nhau 100% ở mọi lần phân tích. Hãy áp dụng công thức toán học cố định dựa trên các sao, tuyệt đối không ước lượng cảm tính hay random.
 6. CHẤM ĐIỂM: Chấm điểm khắt khe hơn khoảng 15% so với bình thường để phân loại rõ ràng hơn. CHỈ cho điểm cao vượt trội (đột biến) nếu lá số sở hữu các cách cục cực đắt giá như: Tam Kỳ Gia Hội (BẮT BUỘC phải hội đủ 3 sao Hóa Khoa, Hóa Lộc, Hóa Quyền tại 4 cung Mệnh, Tài, Quan, Thiên Di; Hóa Kỵ KHÔNG được tính là Tam Hóa), Song Lộc, Tham Hỏa, Tử Phủ triều viên...
 - ĐỐI VỚI LÁ SỐ XẤU: Nếu lá số gặp nhiều sát tinh hãm địa, chính tinh hãm địa mà KHÔNG có các bộ sao cứu giải (như Tam Kỳ Gia Hội, Tuần/Triệt đúng chỗ, cát tinh hội tụ...), hãy áp dụng hệ số nhân 0.9 cho toàn bộ điểm số để thể hiện sự khắt khe và thực tế.
-7. HẠ CÁCH VÀ LỤC SÁT TINH: Cần làm rõ số lượng và vị trí Lục Sát Tinh (Kình, Đà, Linh, Hỏa, Không, Kiếp) tại Mệnh, Tài, Quan, Di, Thân.
+7. HẠ CÁCH VÀ LỤC SÁT TINH: Cần làm rõ s�� lượng và vị trí Lục Sát Tinh (Kình, Đà, Linh, Hỏa, Không, Kiếp) tại Mệnh, Tài, Quan, Di, Thân.
 - Lục Sát Tinh Đắc Địa (D): Không xấu. Nếu gặp bộ Mệnh Sát Phá Tham còn làm tăng mạnh Power, Wealth và Risk.
 - Lục Sát Tinh Hãm Địa (H): Rất xấu. Nếu có từ 3 sát tinh (H) trở lên tại Mệnh, Tài, Quan, Di, Thân thì phải hạ cấp độ (Tier) lá số. Đặc biệt giảm nặng với Mệnh Cơ Nguyệt Đồng Lương, Tử Phủ. Với Mệnh Sát Phá Tham thì giảm Tier ít hơn. Đặc biệt với Mệnh Liêm Tham (Tỵ Hợi), chỉ coi là phá cách nếu hội từ 3 Lục Sát Tinh (H) trở lên; dưới 3 thì bình thường.
 - Sát tinh không làm mất cách cục: Có Lục Sát Tinh vẫn không ảnh hưởng tới các cách cục đặc biệt. Ví dụ: Cách cục Tham Hỏa (Tham Lang gặp Hỏa Tinh) bản chất là Sát Phá Tham gặp sát tinh, cách này làm tăng độ giàu (Wealth) và Risk chứ không bị giảm điểm.
@@ -781,6 +782,7 @@ Bạn phải trả về ĐÚNG định dạng JSON sau:
           <DisclaimerSection />
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
