@@ -513,27 +513,7 @@ Bạn phải trả về ĐÚNG định dạng JSON sau:
             {/* Guide Section */}
             <GuideSection />
 
-            {/* API Key Config */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="max-w-xl mx-auto bg-[#131b2f] border border-indigo-500/20 rounded-xl p-6 shadow-lg shadow-indigo-500/5"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Key className="w-4 h-4 text-indigo-400" />
-                <label className="block text-sm font-medium text-indigo-200/80">Google Gemini API Key</label>
-              </div>
-              <input 
-                type="password" 
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="Nhập API Key bắt đầu bằng AIzaSy..." 
-                className="w-full bg-[#0a0f1c] border border-indigo-500/30 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-400 transition-colors placeholder:text-slate-600"
-              />
-              <p className="text-xs text-indigo-300/50 mt-2">
-                Lấy API Key miễn phí tại <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Google AI Studio</a>.
-              </p>
-            </motion.div>
+          
 
             {/* Upload Section */}
             <motion.div 
