@@ -1,0 +1,97 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - role: string (required) - The user's role
+    //   - createdAt: timestamp (required, immutable) - When the user was created
+    //
+    // Collection: readings
+    // Document ID: {readingId}
+    // Fields:
+    //   - userId: string (required, immutable) - The owner's UID
+    //   - tier: string (required) - The tier of the reading
+    //   - title: string (required) - The title of the reading
+    //   - summary: string (required) - The summary
+    //   - createdAt: timestamp (required, immutable) - When the reading was created
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "thlong1602@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidUser(data) {
+      return hasOnlyAllowedFields(['role', 'createdAt']) &&
+             data.role in ['admin', 'user'] &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidReading(data) {
+      return hasOnlyAllowedFields(['userId', 'tier', 'title', 'summary', 'createdAt']) &&
+             data.userId is string && data.userId.size() > 0 && data.userId.size() < 50 &&
+             data.tier is string && data.tier.size() > 0 && data.tier.size() < 20 &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 200 &&
+             data.summary is string && data.summary.size() > 0 && data.summary.size() < 5000 &&
+             data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && 
+                    ((request.resource.data.role == 'user') || isAdmin());
+      allow update: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && 
+                    ((request.resource.data.role == resource.data.role) || isAdmin()) &&
+                    request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
+    }
+
+    match /readings/{readingId} {
+      allow read: if isDocOwner() || isAdmin();
+      allow create: if isAuthenticated() && isValidReading(request.resource.data) && 
+                    request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && isDocOwner() && isValidReading(request.resource.data) &&
+                    request.resource.data.userId == resource.data.userId &&
+                    request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isDocOwner() || isAdmin();
+    }
+  }
+}

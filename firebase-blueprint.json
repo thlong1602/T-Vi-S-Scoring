@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "Reading": {
+      "title": "Reading",
+      "description": "A saved astrology reading",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns this reading"
+        },
+        "tier": {
+          "type": "string",
+          "description": "The tier of the reading"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the reading"
+        },
+        "summary": {
+          "type": "string",
+          "description": "The summary of the reading"
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "description": "When the reading was created"
+        }
+      },
+      "required": ["userId", "tier", "title", "summary", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "A user profile",
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "description": "The user's role (e.g., admin, user)"
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "description": "When the user was created"
+        }
+      },
+      "required": ["role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/readings/{readingId}": {
+      "schema": "Reading",
+      "description": "Saved astrology readings"
+    }
+  }
+}
